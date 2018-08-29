@@ -1,0 +1,11 @@
+
+label{
+    font-weight: bold;
+    display:block;
+}
+
+input{
+    min-width:200px;
+    display:block;
+    margin-bottom:12px;
+}
