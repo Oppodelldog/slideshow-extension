@@ -5,10 +5,43 @@ label{
 }
 
 input{
-    min-width:200px;
     display:block;
     margin-bottom:12px;
 }
 
+input[type=text]{
+    min-width:200px;
+}
+
 input[type=checkbox]{
+    -moz-appearance: none;
+}
+
+input[type=checkbox] {
+    position: relative;
+    width: 1.4em;
+    height: 1.4em;
+    border: 1px solid gray;
+    vertical-align: -2px;
+    color: #22ff33;
+}
+
+input[type=checkbox]::before {
+    content: "✔";
+    position: absolute;
+    font-size: 1.2em;
+    right: 0.1em;
+    top: 0em;
+    visibility: hidden;
+    font-size:18px;
+}
+
+input[type=checkbox]:checked::before {
+    visibility: visible;
+}
+
+input[type=checkbox]:disabled {
+    border-color: black;
+    background: #ddd;
+    color: gray;
 }
