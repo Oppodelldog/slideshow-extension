@@ -9,3 +9,6 @@ input{
     display:block;
     margin-bottom:12px;
 }
+
+input[type=checkbox]{
+}

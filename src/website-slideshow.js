@@ -2,13 +2,15 @@ console.log("extension-connect");
 
 const ACTION_LOAD_URL = 'loadUrl';
 
-var clients = [];
+let clients = [];
 
 connectEachNewTabToServer();
-deconnectFromServerWhenTabIsClosed();
+disconnectFromServerWhenTabIsClosed();
+addButtonBehavior();
 
 function connectEachNewTabToServer() {
     browser.tabs.onCreated.addListener((tab) => {
+        updateButton();
         browser.storage.local.get().then(
             (settings) => {
                 connectTabToServer(tab, settings);
@@ -19,21 +21,53 @@ function connectEachNewTabToServer() {
     });
 }
 
-function deconnectFromServerWhenTabIsClosed() {
+function disconnectFromServerWhenTabIsClosed() {
     browser.tabs.onRemoved.addListener((tabId) => {
-        var client = clients[tabId];
+        const client = clients[tabId];
         client.disconnect();
         delete clients[tabId];
         console.log("disconnected from slideshow server on tab " + tabId);
     });
 }
 
+function addButtonBehavior() {
+    browser.browserAction.onClicked.addListener(function () {
+        browser.storage.local.get().then(
+            (settings) => {
+                settings.addOnEnabled = !settings.addOnEnabled;
+                browser.storage.local.set(settings);
+                updateButton();
+            },
+            (error) => {
+                console.log(error);
+            });
+    });
+}
+
+function updateButton() {
+    browser.storage.local.get().then(
+        (settings) => {
+            if (settings.addOnEnabled) {
+                browser.browserAction.setIcon({ path: "icons/stop.svg" });
+            } else {
+                browser.browserAction.setIcon({ path: "icons/play.svg" });
+            }
+        },
+        (error) => {
+            console.log(error);
+        });
+}
+
 function connectTabToServer(tab, settings) {
-    console.log("connect to slideshow server on tab " + tab.id);
-    console.log(settings);
-    var client = new SlideshowClient(tab.id, settings.token, settings.serverAddress, settings.sessionName);
-    client.connect();
-    clients[tab.id] = client;
+    if (settings.addOnEnabled) {
+        console.log("connect to slideshow server on tab " + tab.id);
+        console.log(settings);
+        const client = new SlideshowClient(tab.id, settings.token, settings.serverAddress, settings.sessionName);
+        client.connect();
+        clients[tab.id] = client;
+    } else {
+        console.log("addd on not enabled");
+    }
 }
 
 function SlideshowClient(tabId, token, serverAddress, sessionName) {
@@ -44,11 +78,11 @@ function SlideshowClient(tabId, token, serverAddress, sessionName) {
     this.monitorId = null;
     this.websocket = null;
     this.connect = () => {
-        var reconnectParameter = "";
+        let reconnectParameter = "";
         if (this.monitorId != null) {
             reconnectParameter = "&monitorId=" + this.monitorId;
         }
-        var wsUri = "ws://" + this.serverAddress + "/connect?token=" + this.token + "&sessionName=" + this.sessionName + reconnectParameter;
+        const wsUri = "ws://" + this.serverAddress + "/connect?token=" + this.token + "&sessionName=" + this.sessionName + reconnectParameter;
         console.log("connecting to " + wsUri);
         this.websocket = new WebSocket(wsUri);
         this.websocket.onopen = this.onOpen.bind(this);
@@ -83,7 +117,7 @@ function SlideshowClient(tabId, token, serverAddress, sessionName) {
 
     this.onMessage = (evt) => {
         console.log("received message");
-        var command = JSON.parse(evt.data);
+        const command = JSON.parse(evt.data);
         console.log(command);
         switch (command.Action) {
             case ACTION_LOAD_URL:
@@ -101,8 +135,8 @@ function SlideshowClient(tabId, token, serverAddress, sessionName) {
     };
 
     this.loadUrl = (url) => {
-        var tabId = this.tabId;
-        var self = this;
+        const tabId = this.tabId;
+        const self = this;
         browser.tabs.update(
             tabId,
             {

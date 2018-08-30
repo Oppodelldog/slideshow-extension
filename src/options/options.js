@@ -4,6 +4,7 @@ function saveOptions(e) {
         token: document.querySelector("#access-token").value,
         sessionName: document.querySelector("#session-name").value,
         serverAddress: document.querySelector("#server-address").value,
+        addOnEnabled: document.querySelector("#addOn-enabled").checked,
     });
 }
 
@@ -13,14 +14,14 @@ function restoreOptions() {
         document.querySelector("#access-token").value = result.token || "";
         document.querySelector("#session-name").value = result.sessionName || "";
         document.querySelector("#server-address").value = result.serverAddress || "";
+        document.querySelector("#addOn-enabled").checked = result.addOnEnabled || false
     }
 
     function onError(error) {
         console.log(`Error: ${error}`);
     }
 
-    var getting = browser.storage.local.get();
-    getting.then(setCurrentChoice, onError);
+    browser.storage.local.get().then(setCurrentChoice, onError);
 }
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
