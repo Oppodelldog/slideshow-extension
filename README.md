@@ -30,3 +30,7 @@ Example: ```123```
 Name of the session (in case you start a slideshow multiple times on the same machine)
 
 Example: ```My Session```
+
+### Server
+The server this extension can connect to can be found here:
+https://github.com/Oppodelldog/slideshow-server
