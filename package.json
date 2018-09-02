@@ -1,0 +1,27 @@
+{
+  "name": "slideshow-extension",
+  "version": "1.0.0",
+  "description": "> Firefox AddOn that plays a slideshow of websites.",
+  "main": "index.js",
+  "directories": {
+    "tests": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oppodelldog/slideshow-extension.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oppodelldog/slideshow-extension/issues"
+  },
+  "homepage": "https://github.com/Oppodelldog/slideshow-extension#readme"
+}

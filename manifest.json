@@ -33,7 +33,8 @@
   },
   "background": {
     "scripts": [
-      "src/website-slideshow.js"
+      "src/website-slideshow.js",
+      "src/slideShowClient.js"
     ]
   }
 }

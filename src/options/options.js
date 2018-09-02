@@ -3,6 +3,7 @@ function saveOptions(e) {
     browser.storage.local.set({
         token: document.querySelector("#access-token").value,
         sessionName: document.querySelector("#session-name").value,
+        slideShowId:document.querySelector("#slideShowId").value,
         serverAddress: document.querySelector("#server-address").value,
         addOnEnabled: document.querySelector("#addOn-enabled").checked,
     });
@@ -13,6 +14,7 @@ function restoreOptions() {
     function setCurrentChoice(result) {
         document.querySelector("#access-token").value = result.token || "";
         document.querySelector("#session-name").value = result.sessionName || "";
+        document.querySelector("#slideShowId").value = result.slideShowId || "";
         document.querySelector("#server-address").value = result.serverAddress || "";
         document.querySelector("#addOn-enabled").checked = result.addOnEnabled || false
     }
